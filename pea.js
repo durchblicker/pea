@@ -2,7 +2,7 @@
 ** © 2013 by Philipp Dunkel <p.dunkel@me.com>. Licensed under MIT License.
 */
 
-module.exports = Do;
+module.exports = Pea;
 
 var next = (function() {
   try {
@@ -16,7 +16,7 @@ var next = (function() {
   };
 }());
 
-function Do(fn) {
+function Pea(fn) {
   var it = {};
   var cbs = [];
   it.then = then.bind(it, cbs);
@@ -144,19 +144,19 @@ function after(args, cb) {
   return this;
 }
 
-Do.paused = function paused(fn) {
+Pea.paused = function paused(fn) {
   return Array.isArray(fn) ? fn.map(function(fn) {
-    return Do.apply(null, arguments).pause();
-  }) : Do.apply(null, arguments).pause();
+    return Pea.apply(null, arguments).pause();
+  }) : Pea.apply(null, arguments).pause();
 };
 
-Do.parallel = function parallel(fns) {
+Pea.parallel = function parallel(fns) {
   var args = Array.prototype.slice.call(arguments, 1);
-  return Do(function(callback) {
+  return Pea(function(callback) {
     var errs = {};
     var vals = {};
     fns.forEach(function(fn, idx) {
-      Do.apply(Do, [fn].concat(args)).then(function(err) {
+      Pea.apply(Pea, [fn].concat(args)).then(function(err) {
         errs[idx] = err;
         vals[idx] = Array.prototype.slice.call(arguments, 1);
 
@@ -179,12 +179,12 @@ Do.parallel = function parallel(fns) {
   });
 };
 
-Do.serial = function serial(fns) {
+Pea.serial = function serial(fns) {
   var args = Array.prototype.slice.call(arguments, 1);
-  return Do(function(callback) {
+  return Pea(function(callback) {
     var results = [];
     var items = fns.map(function(fn, idx) {
-      return Do.paused.apply(Do, [fn].concat(args)).failure(callback).success(function() {
+      return Pea.paused.apply(Pea, [fn].concat(args)).failure(callback).success(function() {
         results.push(Array.prototype.slice.call(arguments, 0));
         if(items[idx + 1]) {
           items[idx + 1].resume();
@@ -199,11 +199,11 @@ Do.serial = function serial(fns) {
   });
 };
 
-Do.until = function until(fns) {
+Pea.until = function until(fns) {
   var args = Array.prototype.slice.call(arguments, 1);
-  return Do(function(callback) {
+  return Pea(function(callback) {
     var items = fns.map(function(fn, idx) {
-      return Do.paused.apply(Do, [fn].concat(args)).success(function() {
+      return Pea.paused.apply(Pea, [fn].concat(args)).success(function() {
         console.error('DONE');
         callback.apply(null, [null].concat(Array.prototype.slice.call(arguments, 0)));
       }).failure(function(err) {
@@ -218,47 +218,47 @@ Do.until = function until(fns) {
   });
 };
 
-Do.series = function series(fns) {
+Pea.series = function series(fns) {
   var args = Array.prototype.slice.call(arguments, 1);
-  return Do(function(callback) {
+  return Pea(function(callback) {
     var fn = fns.slice(0, 1).concat(args);
     fns = fns.slice(1);
-    Do.apply(null, fn).failure(callback).success(function() {
+    Pea.apply(null, fn).failure(callback).success(function() {
       if(!fns.length) return callback.apply(null, arguments);
-      Do.series.apply(Do, [fns].concat(arguments)).then(callback);
+      Pea.series.apply(Pea, [fns].concat(arguments)).then(callback);
     });
   });
 };
 
-Do.map = function map(items, fn) {
+Pea.map = function map(items, fn) {
   items = items.map(function(item, idx, items) {
     return fn.bind(null, item, idx, items);
   });
-  return Do.parallel(items);
+  return Pea.parallel(items);
 };
 
-Do.each = function each(items, fn) {
+Pea.each = function each(items, fn) {
   items = items.map(function(item, idx, items) {
     return fn.bind(null, item, idx, items);
   });
-  return Do.serial(items);
+  return Pea.serial(items);
 };
 
-Do.first = function first(items, fn) {
+Pea.first = function first(items, fn) {
   items = items.map(function(item, idx, items) {
     return fn.bind(null, item, idx, items);
   });
-  return Do.until(items);
+  return Pea.until(items);
 };
 
-Do.all = function all() {
+Pea.all = function all() {
   var dos = Array.prototype.slice.call(arguments, 0).map(function(dop) {
     return('function' === typeof dop) ? dop : function(callback) {
       dop.then(callback);
     };
   });
-  return Do(function(callback) {
-    Do.parallel(dos).then(function(errs, vals) {
+  return Pea(function(callback) {
+    Pea.parallel(dos).then(function(errs, vals) {
       var err = (errs || []).filter(function(err) {
         return !!err;
       }).shift();

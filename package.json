@@ -1,6 +1,6 @@
 {
-  "name":"do",
+  "name":"pea",
   "version":"0.1.0",
   "description":"a very simple promise like library",
-  "main":"do.js"
+  "main":"pea.js"
 }

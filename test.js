@@ -3,9 +3,9 @@
 */
 
 var fs = require('fs');
-var Do = require('./do.js');
+var Pea = require('./pea.js');
 
-var files = [__dirname + '/do.js', __dirname + '/package.json', __dirname + '/Readme.md'];
+var files = [__dirname + '/pea.js', __dirname + '/package.json', __dirname + '/Readme.md'];
 
 function run(file) {
   var callback = arguments[arguments.length - 1];
@@ -15,30 +15,30 @@ function run(file) {
   }, 1000);
 }
 
-Do.each(files, run).then(function(err, args) {
-  console.error('== Do.each ====================================================');
+Pea.each(files, run).then(function(err, args) {
+  console.error('== Pea.each ====================================================');
   console.error(err, args.map(function(arg) {
     return arg ? arg.length : -1;
   }));
   console.error('===============================================================');
 }).then(function() {
-  Do.map(files, run).then(function(err, args) {
-    console.error('== Do.map =====================================================');
+  Pea.map(files, run).then(function(err, args) {
+    console.error('== Pea.map =====================================================');
     console.error(err, args.map(function(arg) {
       return arg ? arg.length : -1;
     }));
     console.error('===============================================================');
-    Do.all.apply(Do, files.map(function(file) {
-      return Do(run, file);
+    Pea.all.apply(Pea, files.map(function(file) {
+      return Pea(run, file);
     })).then(function(err) {
-      console.error('== Do.all =====================================================');
+      console.error('== Pea.all =====================================================');
       console.error.apply(console, [err].concat(Array.prototype.slice.call(arguments, 1).map(function(arg) {
         return arg.length;
       })));
       console.error('===============================================================');
-      Do.first(['none', 'none', ].concat(files), run).then(function(err) {
+      Pea.first(['none', 'none', ].concat(files), run).then(function(err) {
         var args = Array.prototype.slice.call(arguments, 1);
-        console.error('== Do.first ===================================================');
+        console.error('== Pea.first ===================================================');
         console.error(err, args.map(function(arg) {
           return arg ? arg.length : -1;
         }));
