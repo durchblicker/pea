@@ -10,9 +10,15 @@ Of course this also ensures that it does not follow any ideas you might have on 
 
 In concept it is very similar to *async*, but it's simpler and much cleaner to work with.
 
-## Installation
+## Installation / Use
+
+For Node-JS
 
     npm install pea
+
+In Browser
+
+    <script type="text/javascript" src="https://raw.github.com/phidelta/pea/master/pea.js"></script>
 
 ## API
 
