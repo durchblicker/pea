@@ -1,81 +1,81 @@
-# Do
+# Pea
 
-**Do** is basically a simple promise-like library. It's very light weight (less than 300 lines of code) and simple.
+**Pea** is basically a simple promise-like library. It's very light weight (less than 300 lines of code) and simple.
 
 Contrary to a lot of the other promise libraries it doesn't run roughshod over the NodeJS conventions for callbacks, but works with them. At the same time it helps a bit with callback hell and makes for a much nicer code-style.
 
 Of course this also ensures that it does not follow any ideas you might have on promises. While some may think that's a bad thing, I think that's actually good.
 
-**Do** let's you have the good parts of promises without all the garbage.
+**Pea** let's you have the good parts of promises without all the garbage.
 
 In concept it is very similar to *async*, but it's simpler and much cleaner to work with.
 
 ## Installation
 
-    npm install do
+    npm install pea
 
 ## API
 
-### Do(fn, [arg], […])
+### Pea(fn, [arg], […])
 
 **Arguments**
 
  * *fn* a node-style function whose last argument is a callback that needs to be called upon completion
  * *arg* the arguments that *fn* is called with
 
-The constructor of a *Do-Instance*. This executes *fn* with *arg*s. It returns a *Do-Instance*. The *fn* function needs to call the callback, passed as the last argument appended to *args*, when it is complete. So basically *fn* can be any node-style function that follows the `callback as the last argument` convention.
+The constructor of a *Pea-Instance*. This executes *fn* with *arg*s. It returns a *Pea-Instance*. The *fn* function needs to call the callback, passed as the last argument appended to *args*, when it is complete. So basically *fn* can be any node-style function that follows the `callback as the last argument` convention.
 
-#### do.then(cb)
+#### pea.then(cb)
 
 **Arguments**
 
  * *cb* a node style callback function whose first argument is an error or null if successful
 
-This registers a callback to execute when the *Do-Instance* is complete. Then can be called as often as necessary. Even after the *Do-Instance* is complete. It will always call *cb* with the arguments passed to the callback by the main function.
+This registers a callback to execute when the *Pea-Instance* is complete. Then can be called as often as necessary. Even after the *Pea-Instance* is complete. It will always call *cb* with the arguments passed to the callback by the main function.
 
-#### do.failure(cb) *Synonym: do.fail(cb)*
+#### pea.failure(cb) *Synonym: pea.fail(cb)*
 
 **Arguments**
 
  * *cb* a node style callback function whose first argument is an error
 
-Like *do.then* except only if the first argument to callback exists. Of course the callback also only gets the first argument.
+Like *pea.then* except only if the first argument to callback exists. Of course the callback also only gets the first argument.
 
-#### do.success(cb) *Synonym: do.done(cb)*
+#### pea.success(cb) *Synonym: pea.done(cb)*
 
 **Arguments**
 
  * *cb* a callback function whose arguments are the non-error arguments of the result
 
-Like *do.then* except only if the first argument to callback is not set. It also only gets arguments 2+.
+Like *pea.then* except only if the first argument to callback is not set. It also only gets arguments 2+.
 
-#### do.pause()
+#### pea.pause()
 
-Pauses the execution of the *Do-Instance* unless it has already started.
+Pauses the execution of the *Pea-Instance* unless it has already started.
 
-    var doinstance = Do(function(callback){…});
-    doinstance.pause();
+    var pea = Pea(function(callback){…});
+    pea.pause();
 
 will work. While
 
-    var doinstance = Do(function(callback){…});
-    setTimeout(function() { doinstance.pause(); }, 0);
+    var pea = Pea(function(callback){…});
+    setTimeout(function() { pea.pause(); }, 0);
 
 will not.
 
-#### do.resume()
+#### pea.resume()
 
-Resumes a paused *Do-Instance*.
+Resumes a paused *Pea-Instance*.
 
-### Do.paused(fn) or Do.paused([ fn, … ])
+### Pea.paused(fn) or Pea.paused([ fn, … ])
 
 **Arguments**
 
  * *fn* a node-style function or array of node-style funtions
 
-Creates a paused *Do-Instance* or array of same. To start execution you have to call *doinstance.resume()* on each *Do-Instance*.
+Creates a paused *Pea-Instance* or array of same. To start execution you have to call *pea.resume()* on each *Pea-Instance*.
 
-### Do.parallel(functions)
+### Pea.parallel(functions)
 
 **Arguments**
 
@@ -83,7 +83,7 @@ Creates a paused *Do-Instance* or array of same. To start execution you have to 
 
 Executes a set of functions in parallel. It returns an array of errors and an array of result arrays.
 
-### Do.serial(functions)
+### Pea.serial(functions)
 
 **Arguments**
 
@@ -91,41 +91,41 @@ Executes a set of functions in parallel. It returns an array of errors and an ar
 
 Executes a set of functions in series. If an error is returned it stops and returns that error.
 
-### Do.until(functions)
+### Pea.until(functions)
 
 **Arguments**
 
  * *functions* an array of node-style functions
 
-Executes a set of functions in order until there is one that does not return an error. If the last one returns an error it is the result of the entire *Do-Instance*.
+Executes a set of functions in order until there is one that does not return an error. If the last one returns an error it is the result of the entire *Pea-Instance*.
 
-### Do.series(functions)
+### Pea.series(functions)
 
 **Arguments**
 
  * *functions* an array of node-style functions
 
-Executes a set of functions each called with the *success* result of the previous. The additional parameters of the *Do.series* call are passed into the first function. The result is the result of the last function. (This is like *async.waterfall*)
+Executes a set of functions each called with the *success* result of the previous. The additional parameters of the *Pea.series* call are passed into the first function. The result is the result of the last function. (This is like *async.waterfall*)
 
-### Do.map(array, iterator)
+### Pea.map(array, iterator)
 
 **Arguments**
 
  * *array* an array for each item of which *iterator* is called
  * *iterator* a node-style function whose argumens are *item*, *index*, *items*, *callback* very similar to the native *Array.map*
 
-Executes *iterator* for each item in *array*. It returns a *Do-Instance* whose result is the array of the mapping results passed via the callback from *iterator*.
+Executes *iterator* for each item in *array*. It returns a *Pea-Instance* whose result is the array of the mapping results passed via the callback from *iterator*.
 
-### Do.each(array, iterator)
+### Pea.each(array, iterator)
 
 **Arguments**
 
  * *array* an array for each item of which *iterator* is called
  * *iterator* a node-style function whose argumens are *item*, *index*, *items*, *callback* very similar to the native *Array.map*
 
-Like *Do.map()* except that *iterator* is called for each item in *array* in series.
+Like *Pea.map()* except that *iterator* is called for each item in *array* in series.
 
-### Do.first(array, iterator)
+### Pea.first(array, iterator)
 
 **Arguments**
 
@@ -134,13 +134,13 @@ Like *Do.map()* except that *iterator* is called for each item in *array* in ser
 
 Executes *iterator* until for each item in *array* until the first one that does not return an error. If all return an error, the last error is put into the *then()* callbacks *err* argument;
 
-### Do.all(fn, […])
+### Pea.all(fn, […])
 
 **Arguments**
 
  * *fn* a node-style function
 
-Executes all arguments in parallel. The returned *Do-Instance*'s *then* callback is called with the results of the arguments in order.
+Executes all arguments in parallel. The returned *Pea-Instance*'s *then* callback is called with the results of the arguments in order.
 
 ## License
 
