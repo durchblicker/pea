@@ -1,0 +1,6 @@
+{
+  "name":"do",
+  "version":"0.1.0",
+  "description":"a very simple promise like library",
+  "main":"do.js"
+}
