@@ -204,7 +204,6 @@ Pea.until = function until(fns) {
   return Pea(function(callback) {
     var items = fns.map(function(fn, idx) {
       return Pea.paused.apply(Pea, [fn].concat(args)).success(function() {
-        console.error('DONE');
         callback.apply(null, [null].concat(Array.prototype.slice.call(arguments, 0)));
       }).failure(function(err) {
         if(items[idx + 1]) {
@@ -226,6 +225,19 @@ Pea.series = function series(fns) {
     Pea.apply(null, fn).failure(callback).success(function() {
       if(!fns.length) return callback.apply(null, arguments);
       Pea.series.apply(Pea, [fns].concat(arguments)).then(callback);
+    });
+  });
+};
+
+Pea.forcedSeries = function series(fns) {
+  var args = Array.prototype.slice.call(arguments, 1);
+  return Pea(function(callback) {
+    var fn = fns.slice(0, 1).concat(args);
+    fns = fns.slice(1);
+    Pea.apply(null, fn).then(function() {
+      var args = Array.prototype.slice.call(arguments);
+      if(!fns.length) return callback.apply(null, args);
+      Pea.forcedSeries.apply(Pea, [fns].concat(args)).then(callback);
     });
   });
 };
