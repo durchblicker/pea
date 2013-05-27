@@ -1,6 +1,15 @@
 {
   "name":"pea",
-  "version":"0.1.1",
+  "version":"0.1.2",
   "description":"a very simple promise like library",
-  "main":"pea.js"
+  "main":"pea.js",
+  "author":{
+    "name" : "Philipp Dunkel",
+    "email" : "phidelta@phideltacity.net",
+    "url" : "https://github.com/phidelta/"
+  },
+  "repository" : {
+    "type": "git",
+    "url": "https://github.com/phidelta/pea.git"
+  }
 }
