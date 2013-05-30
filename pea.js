@@ -223,13 +223,14 @@ Pea.series = function series(fns) {
     var fn = fns.slice(0, 1).concat(args);
     fns = fns.slice(1);
     Pea.apply(null, fn).failure(callback).success(function() {
-      if(!fns.length) return callback.apply(null, arguments);
-      Pea.series.apply(Pea, [fns].concat(arguments)).then(callback);
+      var args = Array.prototype.slice.call(arguments);
+      if(!fns.length) return callback.apply(null, args);
+      Pea.series.apply(Pea, [fns].concat(args)).then(callback);
     });
   });
 };
 
-Pea.forcedSeries = function series(fns) {
+Pea.forcedSeries = function forcedseries(fns) {
   var args = Array.prototype.slice.call(arguments, 1);
   return Pea(function(callback) {
     var fn = fns.slice(0, 1).concat(args);
@@ -238,6 +239,28 @@ Pea.forcedSeries = function series(fns) {
       var args = Array.prototype.slice.call(arguments);
       if(!fns.length) return callback.apply(null, args);
       Pea.forcedSeries.apply(Pea, [fns].concat(args)).then(callback);
+    });
+  });
+};
+
+Pea.forcedSerial = function forcedSerial(fns) {
+  var args = Array.prototype.slice.call(arguments, 1);
+  return Pea(function(callback) {
+    var fn = fns.slice(0, 1).concat(args);
+    fns = fns.slice(1);
+    Pea.apply(null, fn).then(function(err, val) {
+      err = [err || null];
+      val = [val || null];
+      if(!fns.length) {
+        return callback(err.filter(function(e) {
+          return !!e;
+        }).length ? err : null, val);
+      }
+      Pea.forcedSerial.apply(Pea, [fns].concat(args)).then(function(errs, vals) {
+        err = err.concat(errs || [null]);
+        val = val.concat(vals || [null]);
+        callback(err, val);
+      });
     });
   });
 };
@@ -254,6 +277,13 @@ Pea.each = function each(items, fn) {
     return fn.bind(null, item, idx, items);
   });
   return Pea.serial(items);
+};
+
+Pea.eachForced = function(items, fn) {
+  var args = Array.prototype.slice.call(arguments, 2);
+  return Pea.forcedSerial(items.map(function(item, idx, items) {
+    return fn.bind.apply(fn, [null, item, idx, items].concat(args));
+  }));
 };
 
 Pea.first = function first(items, fn) {
