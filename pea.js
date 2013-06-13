@@ -155,6 +155,7 @@ Pea.parallel = function parallel(fns) {
   return Pea(function(callback) {
     var errs = {};
     var vals = {};
+    if (!fns.length) return callback();
     fns.forEach(function(fn, idx) {
       Pea.apply(Pea, [fn].concat(args)).then(function(err) {
         errs[idx] = err;
@@ -183,6 +184,7 @@ Pea.serial = function serial(fns) {
   var args = Array.prototype.slice.call(arguments, 1);
   return Pea(function(callback) {
     var results = [];
+    if (!fns.length) return callback();
     var items = fns.map(function(fn, idx) {
       return Pea.paused.apply(Pea, [fn].concat(args)).failure(callback).success(function() {
         results.push(Array.prototype.slice.call(arguments, 0));
@@ -202,6 +204,7 @@ Pea.serial = function serial(fns) {
 Pea.until = function until(fns) {
   var args = Array.prototype.slice.call(arguments, 1);
   return Pea(function(callback) {
+    if (!fns.length) return callback();
     var items = fns.map(function(fn, idx) {
       return Pea.paused.apply(Pea, [fn].concat(args)).success(function() {
         callback.apply(null, [null].concat(Array.prototype.slice.call(arguments, 0)));
@@ -219,6 +222,7 @@ Pea.until = function until(fns) {
 
 Pea.series = function series(fns) {
   var args = Array.prototype.slice.call(arguments, 1);
+  if(!fns.length) return callback.apply(null, [null].concat(args));
   return Pea(function(callback) {
     var fn = fns.slice(0, 1).concat(args);
     fns = fns.slice(1);
@@ -232,6 +236,7 @@ Pea.series = function series(fns) {
 
 Pea.forcedSeries = function forcedseries(fns) {
   var args = Array.prototype.slice.call(arguments, 1);
+  if(!fns.length) return callback.apply(null, [null].concat(args));
   return Pea(function(callback) {
     var fn = fns.slice(0, 1).concat(args);
     fns = fns.slice(1);
@@ -246,6 +251,7 @@ Pea.forcedSeries = function forcedseries(fns) {
 Pea.forcedSerial = function forcedSerial(fns) {
   var args = Array.prototype.slice.call(arguments, 1);
   return Pea(function(callback) {
+    if (!fns.length) return callback.apply(null, [null].concat(args));
     var fn = fns.slice(0, 1).concat(args);
     fns = fns.slice(1);
     Pea.apply(null, fn).then(function(err, val) {
