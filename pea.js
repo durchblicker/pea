@@ -151,11 +151,11 @@ Pea.paused = function paused(fn) {
 };
 
 Pea.parallel = function parallel(fns) {
+  if (!fns.length) return Pea(function(callback) { return callback(); });
   var args = Array.prototype.slice.call(arguments, 1);
   return Pea(function(callback) {
     var errs = {};
     var vals = {};
-    if (!fns.length) return callback();
     fns.forEach(function(fn, idx) {
       Pea.apply(Pea, [fn].concat(args)).then(function(err) {
         errs[idx] = err;
@@ -181,10 +181,10 @@ Pea.parallel = function parallel(fns) {
 };
 
 Pea.serial = function serial(fns) {
+  if (!fns.length) return Pea(function(callback) { return callback(); });
   var args = Array.prototype.slice.call(arguments, 1);
   return Pea(function(callback) {
     var results = [];
-    if (!fns.length) return callback();
     var items = fns.map(function(fn, idx) {
       return Pea.paused.apply(Pea, [fn].concat(args)).failure(callback).success(function() {
         results.push(Array.prototype.slice.call(arguments, 0));
@@ -204,7 +204,6 @@ Pea.serial = function serial(fns) {
 Pea.until = function until(fns) {
   var args = Array.prototype.slice.call(arguments, 1);
   return Pea(function(callback) {
-    if (!fns.length) return callback();
     var items = fns.map(function(fn, idx) {
       return Pea.paused.apply(Pea, [fn].concat(args)).success(function() {
         callback.apply(null, [null].concat(Array.prototype.slice.call(arguments, 0)));
@@ -222,7 +221,6 @@ Pea.until = function until(fns) {
 
 Pea.series = function series(fns) {
   var args = Array.prototype.slice.call(arguments, 1);
-  if(!fns.length) return callback.apply(null, [null].concat(args));
   return Pea(function(callback) {
     var fn = fns.slice(0, 1).concat(args);
     fns = fns.slice(1);
@@ -236,7 +234,6 @@ Pea.series = function series(fns) {
 
 Pea.forcedSeries = function forcedseries(fns) {
   var args = Array.prototype.slice.call(arguments, 1);
-  if(!fns.length) return callback.apply(null, [null].concat(args));
   return Pea(function(callback) {
     var fn = fns.slice(0, 1).concat(args);
     fns = fns.slice(1);
@@ -251,7 +248,6 @@ Pea.forcedSeries = function forcedseries(fns) {
 Pea.forcedSerial = function forcedSerial(fns) {
   var args = Array.prototype.slice.call(arguments, 1);
   return Pea(function(callback) {
-    if (!fns.length) return callback.apply(null, [null].concat(args));
     var fn = fns.slice(0, 1).concat(args);
     fns = fns.slice(1);
     Pea.apply(null, fn).then(function(err, val) {
@@ -271,16 +267,26 @@ Pea.forcedSerial = function forcedSerial(fns) {
   });
 };
 
+function bind(fn, thisp, args) {
+  args = args || [];
+  return function() {
+    var pass = args.concat(Array.prototype.slice.call(arguments));
+    return fn.apply(thisp, pass);
+  };
+}
+
 Pea.map = function map(items, fn) {
+  var args = Array.prototype.slice.call(arguments, 2);
   items = items.map(function(item, idx, items) {
-    return fn.bind(null, item, idx, items);
+    return bind(fn, null, args.concat([ item, idx, items ]));
   });
   return Pea.parallel(items);
 };
 
 Pea.each = function each(items, fn) {
+  var args = Array.prototype.slice.call(arguments, 2);
   items = items.map(function(item, idx, items) {
-    return fn.bind(null, item, idx, items);
+    return bind(fn, null, args.concat([ item, idx, items ]));
   });
   return Pea.serial(items);
 };
