@@ -1,4 +1,4 @@
-# Pea
+# Pea [![Build Status](https://secure.travis-ci.org/phidelta/pea.png)](http://travis-ci.org/#!/phidelta/pea)
 
 **Pea** is basically a simple promise-like library. It's very light weight (less than 300 lines of code) and simple.
 
