@@ -69,6 +69,9 @@ will not.
 
 Resumes a paused *Pea-Instance*.
 
+#### pea.next(pea)
+#### pea.error(fn)
+
 ### Pea.series(functions)
 
 **Arguments**
@@ -77,7 +80,7 @@ Resumes a paused *Pea-Instance*.
 
 Executes a set of functions each called with the *success* result of the previous. The additional parameters of the *Pea.series* call are passed into the first function. The result is the result of the last function. (This is like *async.waterfall*)
 
-### Pea.map(array, iterator)
+### Pea.map(array, iterator) *Pea.mapany(array, iterator)*
 
 **Arguments**
 
@@ -86,7 +89,8 @@ Executes a set of functions each called with the *success* result of the previou
 
 Executes *iterator* for each item in *array*. It returns a *Pea-Instance* whose result is the array of the mapping results passed via the callback from *iterator*.
 
-### Pea.each(array, iterator)
+### Pea.each(array, iterator) *Pea.eachany(array, iterator)*
+
 
 **Arguments**
 
@@ -94,6 +98,8 @@ Executes *iterator* for each item in *array*. It returns a *Pea-Instance* whose 
  * *iterator* a node-style function whose argumens are *item*, *index*, *items*, *callback* very similar to the native *Array.map*
 
 Like *Pea.map()* except that *iterator* is called for each item in *array* in series.
+
+### Pea.any(array, iterator) *Pea.anyall(array, iterator)*
 
 ### Pea.first(array, iterator)
 
@@ -104,13 +110,15 @@ Like *Pea.map()* except that *iterator* is called for each item in *array* in se
 
 Executes *iterator* until for each item in *array* until the first one that does not return an error. If all return an error, the last error is put into the *then()* callbacks *err* argument;
 
-### Pea.all(fn, […])
+### Pea.all(pea[, pea[, …]])
 
 **Arguments**
 
- * *fn* a node-style function
+ * *pea* a pea instance
 
 Executes all arguments in parallel. The returned *Pea-Instance*'s *then* callback is called with the results of the arguments in order.
+
+### Pea.Soup *the underlying functionality*
 
 ## License
 
