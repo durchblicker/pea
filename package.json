@@ -2,7 +2,7 @@
   "name":"pea",
   "version":"0.1.4",
   "description":"a very simple promise like library",
-  "main":"pea.js",
+  "main":"index.js",
   "author":{
     "name" : "Philipp Dunkel",
     "email" : "phidelta@phideltacity.net",
