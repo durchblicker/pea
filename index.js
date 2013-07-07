@@ -5,6 +5,7 @@
 var Pea = require('./lib/pea.js');
 var Soup = require('./lib/soup.js');
 var Raw = require('./lib/raw.js');
+var Series = require('./lib/series.js');
 
 module.exports = Pea;
 
@@ -16,3 +17,5 @@ Pea.any = Raw.any;
 Pea.anyall = Raw.anyall;
 Pea.first = Raw.first;
 Pea.Soup = Soup;
+Pea.series = Series;
+Pea.forcedSeries = Series.forced;
