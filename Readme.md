@@ -1,5 +1,7 @@
 # Pea [![Build Status](https://secure.travis-ci.org/phidelta/pea.png)](http://travis-ci.org/#!/phidelta/pea)
 
+**TODO:** Documentation is slightly out of date. *Needs update!*
+
 **Pea** is basically a simple promise-like library. It's very light weight (less than 300 lines of code) and simple.
 
 Contrary to a lot of the other promise libraries it doesn't run roughshod over the NodeJS conventions for callbacks, but works with them. At the same time it helps a bit with callback hell and makes for a much nicer code-style.
@@ -12,13 +14,7 @@ In concept it is very similar to *async*, but it's simpler and much cleaner to w
 
 ## Installation / Use
 
-For Node-JS
-
     npm install pea
-
-In Browser
-
-    <script type="text/javascript" src="https://raw.github.com/phidelta/pea/master/pea.js"></script>
 
 ## API
 
@@ -72,38 +68,6 @@ will not.
 #### pea.resume()
 
 Resumes a paused *Pea-Instance*.
-
-### Pea.paused(fn) or Pea.paused([ fn, … ])
-
-**Arguments**
-
- * *fn* a node-style function or array of node-style funtions
-
-Creates a paused *Pea-Instance* or array of same. To start execution you have to call *pea.resume()* on each *Pea-Instance*.
-
-### Pea.parallel(functions)
-
-**Arguments**
-
- * *functions* an array of node-style functions
-
-Executes a set of functions in parallel. It returns an array of errors and an array of result arrays.
-
-### Pea.serial(functions)
-
-**Arguments**
-
- * *functions* an array of node-style functions
-
-Executes a set of functions in series. If an error is returned it stops and returns that error.
-
-### Pea.until(functions)
-
-**Arguments**
-
- * *functions* an array of node-style functions
-
-Executes a set of functions in order until there is one that does not return an error. If the last one returns an error it is the result of the entire *Pea-Instance*.
 
 ### Pea.series(functions)
 
