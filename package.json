@@ -11,5 +11,8 @@
   "repository" : {
     "type": "git",
     "url": "https://github.com/phidelta/pea.git"
+  },
+  "scripts":{
+    "test":"node ./test.js"
   }
 }
