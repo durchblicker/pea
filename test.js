@@ -45,40 +45,5 @@ Pea(run, files[0]).next(Pea(function(callback) {
   console.error('SUCCESS');
 }).error(function(err) {
   console.error('FAILURE');
+  process.exit(1);
 });
-
-
-/*
-Pea.each(files, run).then(function(err, args) {
-  console.error('== Pea.each ====================================================');
-  console.error(err, args.map(function(arg) {
-    return arg ? arg.length : -1;
-  }));
-  console.error('===============================================================');
-}).then(function() {
-  Pea.map(files, run).then(function(err, args) {
-    console.error('== Pea.map =====================================================');
-    console.error(err, args.map(function(arg) {
-      return arg ? arg.length : -1;
-    }));
-    console.error('===============================================================');
-    Pea.all.apply(Pea, files.map(function(file) {
-      return Pea(run, file);
-    })).then(function(err) {
-      console.error('== Pea.all =====================================================');
-      console.error.apply(console, [err].concat(Array.prototype.slice.call(arguments, 1).map(function(arg) {
-        return arg.length;
-      })));
-      console.error('===============================================================');
-      Pea.first(['none', 'none', ].concat(files), run).then(function(err) {
-        var args = Array.prototype.slice.call(arguments, 1);
-        console.error('== Pea.first ===================================================');
-        console.error(err, args.map(function(arg) {
-          return arg ? arg.length : -1;
-        }));
-        console.error('===============================================================');
-      });
-    });
-  });
-});
-*/
