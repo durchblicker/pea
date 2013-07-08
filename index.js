@@ -9,6 +9,7 @@ var Series = require('./lib/series.js');
 
 module.exports = Pea;
 
+Pea.all = Soup.all;
 Pea.map = Raw.map;
 Pea.mapall = Raw.mapall;
 Pea.each = Raw.each;
