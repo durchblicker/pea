@@ -20,3 +20,9 @@ Pea.first = Raw.first;
 Pea.Soup = Soup;
 Pea.series = Series;
 Pea.forcedSeries = Series.forced;
+
+Pea.bind = function(thisp, fn) {
+  return function() {
+    return fn.apply(thisp, Array.prototype.slice.call(arguments));
+  };
+};
