@@ -1,4 +1,6 @@
-# Pea [![Build Status](https://secure.travis-ci.org/phidelta/pea.png)](http://travis-ci.org/#!/phidelta/pea)
+# Pea [![NPM](https://nodei.co/npm/pea.png)](https://nodei.co/npm/pea/)
+
+[![Build Status](https://secure.travis-ci.org/phidelta/pea.png)](http://travis-ci.org/#!/phidelta/pea)
 
 **TODO:** Documentation is slightly out of date. *Needs update!*
 
